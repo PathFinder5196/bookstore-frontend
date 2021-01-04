@@ -12,6 +12,7 @@ import BooksDataTable from "./components/BooksDataTable";
 import AddEditBook from "./components/Dialogs/AddEditBook";
 import DeleteBook from "./components/Dialogs/DeleteBook";
 import DrawerComponent from "./components/DrawerComponent";
+import BackdropComponent from "./components/BackdropComponent";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -41,14 +42,18 @@ function App() {
   const classes = useStyles();
 
   const [books, setBooks] = useState([]);
-  const [editing, setEditing] = useState(null);
-  const [open, setOpen] = React.useState(false);
-  const [openDelete, setOpenDelete] = React.useState(false);
+  const [editing, setEditing] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [bookToEdit, setBookToEdit] = useState({});
+  const [showBackDrop, setShowBackDrop] = useState(false);
+  const [bookToDelete, setBookToDelete] = useState({});
 
   const handleClose = () => {
     setOpen(false);
     setTimeout(() => {
       setEditing(false);
+      setBookToEdit({});
     }, 500);
   };
 
@@ -60,59 +65,54 @@ function App() {
     getBooks();
   }, []);
   // Create
-  const onSubmitBook = async (e) => {
-    e.preventDefault();
-    const { title, author, description } = e.target;
-    debugger;
-    if (
-      title &&
-      title.value &&
-      author &&
-      author.value &&
-      description &&
-      description.value
-    ) {
-      await axios.post("/api/books", {
-        title: title.value,
-        author: author.value,
-        description: description.value,
-      });
-      title.value = "";
-      author.value = "";
-      description.value = "";
-      getBooks();
+  const onSubmitBook = async (fields) => {
+    const { title, author, description, _id } = fields;
+    if (title && author && description) {
+      if (editing) {
+        await axios.post(`/api/books/update/${_id}`, {
+          title,
+          author,
+          description,
+        });
+        setEditing(false);
+        setOpen(false);
+        setBookToEdit({});
+        getBooks();
+      } else {
+        await axios.post("/api/books", {
+          title,
+          author,
+          description,
+        });
+        getBooks();
+        setOpen(false);
+      }
     }
   };
 
   // Read
   const getBooks = async () => {
+    setShowBackDrop(true);
     const res = await axios.get("/api/books");
     const data = res.data;
     setBooks(data);
-  };
-  // Update
-  const onSubmitEdits = async (e, id) => {
-    e.preventDefault();
-    const { title, author, description } = e.target;
-    await axios.post(`/api/books/update/${id}`, {
-      title: title.value,
-      author: author.value,
-      description: description.value,
-    });
-    setEditing(null);
-    getBooks();
+    setShowBackDrop(false);
   };
 
   // Delete
-  const deleteBook = async (bookToDelete) => {
-    await axios({
-      method: "DELETE",
-      url: "/api/books/",
-      data: {
-        id: bookToDelete,
-      },
-    });
-    await getBooks();
+  const deleteBook = async () => {
+    if (bookToDelete) {
+      await axios({
+        method: "DELETE",
+        url: "/api/books/",
+        data: {
+          id: bookToDelete,
+        },
+      });
+      setOpenDelete(false);
+      setBookToDelete(null);
+      await getBooks();
+    }
   };
 
   return (
@@ -126,6 +126,10 @@ function App() {
         </Toolbar>
       </AppBar>
       <DrawerComponent />
+      <BackdropComponent
+        showBackDrop={showBackDrop}
+        setShowBackDrop={setShowBackDrop}
+      />
 
       <main className={classes.content}>
         <Toolbar />
@@ -140,15 +144,22 @@ function App() {
           </Fab>
           <BooksDataTable
             books={books}
-            setEditing={setEditing}
+            setEditing={(book) => {
+              setBookToEdit(book);
+              setEditing(true);
+            }}
             setOpen={setOpen}
-            setOpenDelete={setOpenDelete}
+            setOpenDelete={(id) => {
+              setBookToDelete(id);
+              setOpenDelete(true);
+            }}
           />
           <AddEditBook
             open={open}
             handleClose={handleClose}
             editing={editing}
             onSubmitBook={onSubmitBook}
+            book={bookToEdit}
           />
           <DeleteBook
             openDelete={openDelete}

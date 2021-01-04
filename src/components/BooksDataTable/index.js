@@ -11,6 +11,9 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import TableFooter from "@material-ui/core/TableFooter";
+import TablePagination from "@material-ui/core/TablePagination";
+import TablePaginationActions from "./TablePaginationActions";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -37,6 +40,20 @@ const useStyles = makeStyles((theme) => ({
 
 function BooksDataTable({ books, setEditing, setOpen, setOpenDelete }) {
   const classes = useStyles();
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const emptyRows =
+    rowsPerPage - Math.min(rowsPerPage, books?.length - page * rowsPerPage);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
   return (
     <Box component="span" m={1}>
       <TableContainer component={Paper}>
@@ -50,8 +67,14 @@ function BooksDataTable({ books, setEditing, setOpen, setOpenDelete }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {books.map((book) => (
-              <TableRow key={book.name}>
+            {(rowsPerPage > 0
+              ? books.slice(
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage
+                )
+              : books
+            ).map((book) => (
+              <TableRow key={book._id}>
                 <TableCell component="th" scope="row">
                   {book.title}
                 </TableCell>
@@ -61,7 +84,7 @@ function BooksDataTable({ books, setEditing, setOpen, setOpenDelete }) {
                   <IconButton
                     aria-label="edit"
                     onClick={() => {
-                      setEditing(book._id);
+                      setEditing(book);
                       setOpen(true);
                     }}
                   >
@@ -69,14 +92,37 @@ function BooksDataTable({ books, setEditing, setOpen, setOpenDelete }) {
                   </IconButton>
                   <IconButton
                     aria-label="delete"
-                    onClick={() => setOpenDelete(true)}
+                    onClick={() => setOpenDelete(book._id)}
                   >
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
               </TableRow>
             ))}
+            {emptyRows > 0 && (
+              <TableRow style={{ height: 53 * emptyRows }}>
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
           </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                colSpan={4}
+                count={books?.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                SelectProps={{
+                  inputProps: { "aria-label": "rows per page" },
+                  native: true,
+                }}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+                ActionsComponent={TablePaginationActions}
+              />
+            </TableRow>
+          </TableFooter>
         </Table>
       </TableContainer>
     </Box>
