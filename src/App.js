@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -13,6 +12,7 @@ import AddEditBook from "./components/Dialogs/AddEditBook";
 import DeleteBook from "./components/Dialogs/DeleteBook";
 import DrawerComponent from "./components/DrawerComponent";
 import BackdropComponent from "./components/BackdropComponent";
+import { getAllBooks, addBook, updateBook, removeBook } from "./actions/books";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -64,51 +64,40 @@ function App() {
   useEffect(() => {
     getBooks();
   }, []);
-  // Create
+
   const onSubmitBook = async (fields) => {
     const { title, author, description, _id } = fields;
+    const bookDetails = {
+      title,
+      author,
+      description,
+    };
     if (title && author && description) {
       if (editing) {
-        await axios.post(`/api/books/update/${_id}`, {
-          title,
-          author,
-          description,
-        });
+        await updateBook(_id, bookDetails);
         setEditing(false);
         setOpen(false);
         setBookToEdit({});
         getBooks();
       } else {
-        await axios.post("/api/books", {
-          title,
-          author,
-          description,
-        });
+        await addBook(bookDetails);
         getBooks();
         setOpen(false);
       }
     }
   };
 
-  // Read
   const getBooks = async () => {
     setShowBackDrop(true);
-    const res = await axios.get("/api/books");
-    const data = res.data;
+    const resp = await getAllBooks();
+    const data = resp.data;
     setBooks(data);
     setShowBackDrop(false);
   };
 
-  // Delete
   const deleteBook = async () => {
     if (bookToDelete) {
-      await axios({
-        method: "DELETE",
-        url: "/api/books/",
-        data: {
-          id: bookToDelete,
-        },
-      });
+      await removeBook(bookToDelete);
       setOpenDelete(false);
       setBookToDelete(null);
       await getBooks();

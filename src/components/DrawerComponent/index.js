@@ -37,7 +37,7 @@ function DrawerComponent() {
       <div className={classes.drawerContainer}>
         <List>
           {["Books"].map((text, index) => (
-            <ListItem button key={text}>
+            <ListItem button key={index} selected>
               <ListItemIcon>
                 <LibraryBooksIcon />
               </ListItemIcon>
