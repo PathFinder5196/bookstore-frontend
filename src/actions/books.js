@@ -1,10 +1,11 @@
 import axios from "axios";
 import idx from "idx";
+import { API_URL } from "../clientConfig";
 
 export function getAllBooks() {
   return axios({
     method: "get",
-    url: `/api/books`,
+    url: `${API_URL}api/books`,
   })
     .then((resp) => resp)
     .catch((error) => idx(error, (_) => _.response.data));
@@ -13,7 +14,7 @@ export function getAllBooks() {
 export function addBook(data) {
   return axios({
     method: "post",
-    url: `/api/books`,
+    url: `${API_URL}api/books`,
     data,
   })
     .then((resp) => resp)
@@ -23,7 +24,7 @@ export function addBook(data) {
 export function updateBook(id, data) {
   return axios({
     method: "post",
-    url: `/api/books/update/${id}`,
+    url: `${API_URL}api/books/update/${id}`,
     data,
   })
     .then((resp) => resp)
@@ -33,7 +34,7 @@ export function updateBook(id, data) {
 export function removeBook(id) {
   return axios({
     method: "DELETE",
-    url: `/api/books`,
+    url: `${API_URL}api/books`,
     data: { id },
   })
     .then((resp) => resp)
