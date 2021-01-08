@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Container from "@material-ui/core/Container";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import BooksDataTable from "../../components/BooksDataTable";
 import AddEditBook from "../../components/Dialogs/AddEditBook";
 import DeleteBook from "../../components/Dialogs/DeleteBook";
-import DrawerComponent from "../../components/DrawerComponent";
 import BackdropComponent from "../../components/BackdropComponent";
 import {
   getAllBooks,
@@ -109,59 +103,44 @@ function Book() {
     }
   };
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6" noWrap>
-            Book Store
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <DrawerComponent />
+    <>
       <BackdropComponent
         showBackDrop={showBackDrop}
         setShowBackDrop={setShowBackDrop}
       />
-
-      <main className={classes.content}>
-        <Toolbar />
-        <Container>
-          <Fab
-            color="primary"
-            aria-label="add"
-            className={classes.fab}
-            onClick={() => setOpen(true)}
-          >
-            <AddIcon />
-          </Fab>
-          <BooksDataTable
-            books={books}
-            setEditing={(book) => {
-              setBookToEdit(book);
-              setEditing(true);
-            }}
-            setOpen={setOpen}
-            setOpenDelete={(id) => {
-              setBookToDelete(id);
-              setOpenDelete(true);
-            }}
-          />
-          <AddEditBook
-            open={open}
-            handleClose={handleClose}
-            editing={editing}
-            onSubmitBook={onSubmitBook}
-            book={bookToEdit}
-          />
-          <DeleteBook
-            openDelete={openDelete}
-            handleDeleteClose={handleDeleteClose}
-            deleteBook={deleteBook}
-          />
-        </Container>
-      </main>
-    </div>
+      <Fab
+        color="primary"
+        aria-label="add"
+        className={classes.fab}
+        onClick={() => setOpen(true)}
+      >
+        <AddIcon />
+      </Fab>
+      <BooksDataTable
+        books={books}
+        setEditing={(book) => {
+          setBookToEdit(book);
+          setEditing(true);
+        }}
+        setOpen={setOpen}
+        setOpenDelete={(id) => {
+          setBookToDelete(id);
+          setOpenDelete(true);
+        }}
+      />
+      <AddEditBook
+        open={open}
+        handleClose={handleClose}
+        editing={editing}
+        onSubmitBook={onSubmitBook}
+        book={bookToEdit}
+      />
+      <DeleteBook
+        openDelete={openDelete}
+        handleDeleteClose={handleDeleteClose}
+        deleteBook={deleteBook}
+      />
+    </>
   );
 }
 
