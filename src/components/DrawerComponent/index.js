@@ -7,6 +7,7 @@ import List from "@material-ui/core/List";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -36,14 +37,18 @@ function DrawerComponent() {
       <Toolbar />
       <div className={classes.drawerContainer}>
         <List>
-          {["Books"].map((text, index) => (
-            <ListItem button key={index} selected>
-              <ListItemIcon>
-                <LibraryBooksIcon />
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button component={Link} to="/" key={1} selected>
+            <ListItemIcon>
+              <LibraryBooksIcon />
+            </ListItemIcon>
+            <ListItemText primary="Books" />
+          </ListItem>
+          <ListItem button component={Link} to="/new" key={2}>
+            <ListItemIcon>
+              <LibraryBooksIcon />
+            </ListItemIcon>
+            <ListItemText primary="Add Book" />
+          </ListItem>
         </List>
       </div>
     </Drawer>
