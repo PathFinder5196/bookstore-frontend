@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
+import { useHistory } from "react-router-dom";
 import BooksDataTable from "../../components/BooksDataTable";
 import AddEditBook from "../../components/Dialogs/AddEditBook";
 import DeleteBook from "../../components/Dialogs/DeleteBook";
@@ -39,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Book() {
   const classes = useStyles();
+  const history = useHistory();
 
   const [books, setBooks] = useState([]);
   const [editing, setEditing] = useState(false);
@@ -112,7 +114,7 @@ function Book() {
         color="primary"
         aria-label="add"
         className={classes.fab}
-        onClick={() => setOpen(true)}
+        onClick={() => history.push("/new")}
       >
         <AddIcon />
       </Fab>
