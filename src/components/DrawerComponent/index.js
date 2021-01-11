@@ -5,7 +5,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import List from "@material-ui/core/List";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
-import PostAddIcon from "@material-ui/icons/PostAdd";
+// import PostAddIcon from "@material-ui/icons/PostAdd";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import { Link } from "react-router-dom";
@@ -73,7 +73,7 @@ function DrawerComponent({ window, location: { pathname } }) {
           </ListItemIcon>
           <ListItemText primary="Books" />
         </ListItem>
-        <ListItem
+        {/* <ListItem
           button
           component={Link}
           to="/new"
@@ -84,7 +84,7 @@ function DrawerComponent({ window, location: { pathname } }) {
             <PostAddIcon />
           </ListItemIcon>
           <ListItemText primary="Add Book" />
-        </ListItem>
+        </ListItem> */}
       </List>
     </div>
   );
