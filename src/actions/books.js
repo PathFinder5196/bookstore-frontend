@@ -11,6 +11,15 @@ export function getAllBooks() {
     .catch((error) => idx(error, (_) => _.response.data));
 }
 
+export function getBookById(id) {
+  return axios({
+    method: "get",
+    url: `${API_URL}api/books/${id}`,
+  })
+    .then((resp) => resp)
+    .catch((error) => idx(error, (_) => _.response.data));
+}
+
 export function addBook(data) {
   return axios({
     method: "post",

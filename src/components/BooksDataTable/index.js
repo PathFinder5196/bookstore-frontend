@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import IconButton from "@material-ui/core/IconButton";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -12,7 +13,8 @@ import TableFooter from "@material-ui/core/TableFooter";
 import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActions from "./TablePaginationActions";
 
-function BooksDataTable({ books, setEditing, setOpen, setOpenDelete }) {
+function BooksDataTable({ books, setOpenDelete }) {
+  const history = useHistory();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -53,8 +55,7 @@ function BooksDataTable({ books, setEditing, setOpen, setOpenDelete }) {
                 <IconButton
                   aria-label="edit"
                   onClick={() => {
-                    setEditing(book);
-                    setOpen(true);
+                    history.push(`/edit/${book._id}`);
                   }}
                 >
                   <EditIcon />

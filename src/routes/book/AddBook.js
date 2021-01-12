@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link, useHistory } from "react-router-dom";
-import { addBook } from "../../actions/books";
+import { addBook, getBookById, updateBook } from "../../actions/books";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -31,12 +31,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AddBook() {
+function AddBook({ match: { params } }) {
   const [fields, setFields] = useState({});
   const [errors, setErrors] = useState({});
 
   const classes = useStyles();
   const history = useHistory();
+
+  useEffect(() => {
+    if (params && params.id) {
+      getBookById(params.id)
+        .then((resp) => {
+          if (resp && resp.data) {
+            const { author, title, _id, description } = resp.data;
+            setFields({ author, title, _id, description });
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [params]);
 
   const handleChange = (e) => {
     fields[e?.target?.name] = e?.target?.value;
@@ -62,14 +77,18 @@ function AddBook() {
   };
 
   const onSubmitBook = async (fields) => {
-    const { title, author, description } = fields;
+    const { title, author, description, _id } = fields;
     const bookDetails = {
       title,
       author,
       description,
     };
     if (title && author && description) {
-      await addBook(bookDetails);
+      if (_id) {
+        await updateBook(_id, bookDetails);
+      } else {
+        await addBook(bookDetails);
+      }
       history.push("/");
     }
   };
@@ -100,7 +119,7 @@ function AddBook() {
               }}
               onChange={handleChange}
               variant="outlined"
-              defaultValue={fields?.title}
+              value={fields?.title}
             />
             <TextField
               label="Author"
@@ -115,7 +134,7 @@ function AddBook() {
                 shrink: true,
               }}
               variant="outlined"
-              defaultValue={fields?.author}
+              value={fields?.author}
               onChange={handleChange}
             />
             <TextField
@@ -132,7 +151,7 @@ function AddBook() {
               variant="outlined"
               multiline
               rows={4}
-              defaultValue={fields?.description}
+              value={fields?.description}
               onChange={handleChange}
             />
             <Grid

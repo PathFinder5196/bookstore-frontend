@@ -11,6 +11,7 @@ function App() {
       <Switch>
         <Route path="/" exact component={Book} />
         <Route path="/new" exact component={AddBook} />
+        <Route path="/edit/:id" exact component={AddBook} />
         <Route path="/default" render={() => <Redirect to="/" />} />
         <Route component={NotFound} />
       </Switch>
