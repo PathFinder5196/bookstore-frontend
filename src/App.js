@@ -4,14 +4,18 @@ import Book from "./routes/book/Book";
 import NotFound from "./components/NotFound";
 import AddBook from "./routes/book/AddBook";
 import Layout from "./components/Layout";
+import Login from "./components/Login";
+import withAuth from "./components/WithAuth";
 
 function App() {
   return (
     <Layout>
       <Switch>
-        <Route path="/" exact component={Book} />
+        <Route path="/" component={withAuth(Book)} />
+        {/* <Route path="/" exact component={Book} /> */}
         <Route path="/new" exact component={AddBook} />
         <Route path="/edit/:id" exact component={AddBook} />
+        <Route path="/login" component={Login} />
         <Route path="/default" render={() => <Redirect to="/" />} />
         <Route component={NotFound} />
       </Switch>
