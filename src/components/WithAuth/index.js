@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { verifyToken } from "../../actions/users";
+import { AdminLayout } from "../Layout";
 
-export default function withAuth(ComponentToProtect) {
+export default function WithAuth(ComponentToProtect) {
   return class extends Component {
     constructor() {
       super();
@@ -34,7 +35,11 @@ export default function withAuth(ComponentToProtect) {
       if (redirect) {
         return <Redirect to="/login" />;
       }
-      return <ComponentToProtect {...this.props} />;
+      return (
+        <AdminLayout>
+          <ComponentToProtect {...this.props} />
+        </AdminLayout>
+      );
     }
   };
 }

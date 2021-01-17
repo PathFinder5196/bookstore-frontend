@@ -8,7 +8,13 @@ export function login(loginData) {
     url: `${API_URL}api/users/authenticate`,
     data: loginData,
   })
-    .then((resp) => resp)
+    .then((resp) => {
+      if (resp?.data?.accessToken) {
+        localStorage.setItem("user", JSON.stringify(resp.data));
+      }
+
+      return resp;
+    })
     .catch((error) => idx(error, (_) => _.response.data));
 }
 
@@ -29,4 +35,16 @@ export function verifyToken() {
   })
     .then((resp) => resp)
     .catch((error) => idx(error, (_) => _.response.data));
+}
+
+export function isAuthenticated() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (user?.accessToken) {
+    return true;
+  }
+  return false;
+}
+
+export function logout() {
+  localStorage.clear();
 }
