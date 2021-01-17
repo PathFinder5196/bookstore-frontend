@@ -89,7 +89,7 @@ function AddBook({ match: { params } }) {
       } else {
         await addBook(bookDetails);
       }
-      history.push("/");
+      history.push("/books");
     }
   };
 
@@ -168,7 +168,7 @@ function AddBook({ match: { params } }) {
               <Button
                 color="primary"
                 component={Link}
-                to={"/"}
+                to={"/books"}
                 className={classes.buttonSpacing}
               >
                 Cancel

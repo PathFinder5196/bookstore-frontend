@@ -14,13 +14,22 @@ import IconButton from "@material-ui/core/IconButton";
 import AppBar from "@material-ui/core/AppBar";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import HomeIcon from "@material-ui/icons/Home";
 import { withRouter } from "react-router-dom";
+import { logout } from "../../actions/users";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
   },
   drawer: {
     [theme.breakpoints.up("sm")]: {
@@ -29,12 +38,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   appBar: { zIndex: theme.zIndex.drawer + 1 },
-  menuButton: {
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up("sm")]: {
-      display: "none",
-    },
-  },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
@@ -45,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function DrawerComponent({ window, location: { pathname } }) {
+function DrawerComponent({ window, location: { pathname }, history }) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -63,9 +66,9 @@ function DrawerComponent({ window, location: { pathname } }) {
         <ListItem
           button
           component={Link}
-          to="/"
+          to="/books"
           key={1}
-          selected={"/" === pathname}
+          selected={"/books" === pathname}
         >
           <ListItemIcon>
             <LibraryBooksIcon />
@@ -81,18 +84,39 @@ function DrawerComponent({ window, location: { pathname } }) {
     <>
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
+          <Hidden mdUp implementation="css">
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              className={classes.menuButton}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Hidden>
+          <Typography variant="h6" noWrap className={classes.title}>
             Book Store
           </Typography>
+          <IconButton
+            color="inherit"
+            onClick={() => {
+              history.push("/");
+            }}
+          >
+            <HomeIcon />
+          </IconButton>
+          <IconButton
+            color="inherit"
+            onClick={() => {
+              logout();
+              setTimeout(() => {
+                history.push("/login");
+              }, 500);
+            }}
+          >
+            <ExitToAppIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">

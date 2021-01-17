@@ -55,7 +55,7 @@ function BooksDataTable({ books, setOpenDelete }) {
                 <IconButton
                   aria-label="edit"
                   onClick={() => {
-                    history.push(`/edit/${book._id}`);
+                    history.push(`/books/edit/${book._id}`);
                   }}
                 >
                   <EditIcon />

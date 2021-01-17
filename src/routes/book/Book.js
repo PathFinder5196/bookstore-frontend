@@ -75,7 +75,7 @@ function Book() {
         color="primary"
         aria-label="add"
         className={classes.fab}
-        onClick={() => history.push("/new")}
+        onClick={() => history.push("/books/new")}
       >
         <AddIcon />
       </Fab>
