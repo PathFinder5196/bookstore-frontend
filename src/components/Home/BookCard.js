@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,7 +32,21 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     backgroundColor: red[500],
+  }, 
+  clippedLine: {
+    display: '-webkit-box',
+    WebkitBoxOrient: 'vertical',
+    WebkitLineClamp: 4,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
+  title: {
+    display: '-webkit-box',
+    WebkitBoxOrient: 'vertical',
+    WebkitLineClamp: 1,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  }
 }));
 
 export default function BookCard({ book, index }) {
@@ -39,16 +54,18 @@ export default function BookCard({ book, index }) {
 
   return (
     <Card className={classes.root}>
-      <CardHeader title={book.title} subheader={book.author} />
+      <CardHeader title={<Tooltip placement="top-start" title={book.title}><p className={classes.title}>{book.title}</p></Tooltip>} subheader={book.author} />
       <CardMedia
         className={classes.media}
         image={`https://source.unsplash.com/random/${index}`}
         title="Paella dish"
       />
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
+      <Tooltip placement="top" title={book.description}>
+        <Typography variant="body2" color="textSecondary" component="p" className={classes.clippedLine}>
           {book.description}
         </Typography>
+        </Tooltip>
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
