@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link, useHistory } from "react-router-dom";
+import WithAuth from "../../components/WithAuth";
 import { addBook, getBookById, updateBook } from "../../actions/books";
 
 const useStyles = makeStyles((theme) => ({
@@ -189,4 +190,4 @@ function AddBook({ match: { params } }) {
   );
 }
 
-export default AddBook;
+export default WithAuth(AddBook);

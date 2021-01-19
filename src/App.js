@@ -1,13 +1,12 @@
-import React from "react";
+import React, { Suspense } from "react";
 import axios from "axios";
 import { Route, Switch } from "react-router-dom";
-import Book from "./routes/book/Book";
-import NotFound from "./components/NotFound";
-import AddBook from "./routes/book/AddBook";
-import Login from "./components/Login";
-import Home from "./components/Home";
-import BookDetails from "./components/Home/BookDetails";
-import WithAuth from "./components/WithAuth";
+const Home = React.lazy(() => import("./components/Home"));
+const BookDetails = React.lazy(() => import("./components/Home/BookDetails"));
+const Login = React.lazy(() => import("./components/Login"));
+const NotFound = React.lazy(() => import("./components/NotFound"));
+const AddBook = React.lazy(() => import("./routes/book/AddBook"));
+const Book = React.lazy(() => import("./routes/book/Book"));
 
 axios.interceptors.request.use(
   (config) => {
@@ -21,19 +20,75 @@ axios.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+const fallBackComponent = <div>Loading...</div>;
+
 function App() {
   return (
     <Switch>
       {/* Public routes */}
-      <Route path="/" exact component={Home} />
-      <Route path="/book/:id" exact component={BookDetails} />
-      <Route path="/login" exact component={Login} />
+      <Route
+        path="/"
+        exact
+        component={(props) => (
+          <Suspense fallback={fallBackComponent}>
+            <Home {...props} />
+          </Suspense>
+        )}
+      />
+      <Route
+        path="/book/:id"
+        exact
+        component={(props) => (
+          <Suspense fallback={fallBackComponent}>
+            <BookDetails {...props} />
+          </Suspense>
+        )}
+      />
+      <Route
+        path="/login"
+        exact
+        component={(props) => (
+          <Suspense fallback={fallBackComponent}>
+            <Login {...props} />
+          </Suspense>
+        )}
+      />
       {/* Admin routes */}
-      <Route path="/books" exact component={WithAuth(Book)} />
-      <Route path="/books/new" exact component={WithAuth(AddBook)} />
-      <Route path="/books/edit/:id" exact component={WithAuth(AddBook)} />
+      <Route
+        path="/books"
+        exact
+        component={(props) => (
+          <Suspense fallback={fallBackComponent}>
+            <Book {...props} />
+          </Suspense>
+        )}
+      />
+      <Route
+        path="/books/new"
+        exact
+        component={(props) => (
+          <Suspense fallback={fallBackComponent}>
+            <AddBook {...props} />
+          </Suspense>
+        )}
+      />
+      <Route
+        path="/books/edit/:id"
+        exact
+        component={(props) => (
+          <Suspense fallback={fallBackComponent}>
+            <AddBook {...props} />
+          </Suspense>
+        )}
+      />
       {/* Not found route */}
-      <Route component={NotFound} />
+      <Route
+        component={(props) => (
+          <Suspense fallback={fallBackComponent}>
+            <NotFound {...props} />
+          </Suspense>
+        )}
+      />
     </Switch>
   );
 }
