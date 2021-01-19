@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import BooksDataTable from "../../components/BooksDataTable";
 import DeleteBook from "../../components/Dialogs/DeleteBook";
 import BackdropComponent from "../../components/BackdropComponent";
+import WithAuth from "../../components/WithAuth";
 import { getAllBooks, removeBook } from "../../actions/books";
 
 const useStyles = makeStyles((theme) => ({
@@ -95,4 +96,4 @@ function Book() {
   );
 }
 
-export default Book;
+export default WithAuth(Book);
