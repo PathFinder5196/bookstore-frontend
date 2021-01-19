@@ -24,72 +24,20 @@ const fallBackComponent = <div>Loading...</div>;
 
 function App() {
   return (
-    <Switch>
-      {/* Public routes */}
-      <Route
-        path="/"
-        exact
-        component={(props) => (
-          <Suspense fallback={fallBackComponent}>
-            <Home {...props} />
-          </Suspense>
-        )}
-      />
-      <Route
-        path="/book/:id"
-        exact
-        component={(props) => (
-          <Suspense fallback={fallBackComponent}>
-            <BookDetails {...props} />
-          </Suspense>
-        )}
-      />
-      <Route
-        path="/login"
-        exact
-        component={(props) => (
-          <Suspense fallback={fallBackComponent}>
-            <Login {...props} />
-          </Suspense>
-        )}
-      />
-      {/* Admin routes */}
-      <Route
-        path="/books"
-        exact
-        component={(props) => (
-          <Suspense fallback={fallBackComponent}>
-            <Book {...props} />
-          </Suspense>
-        )}
-      />
-      <Route
-        path="/books/new"
-        exact
-        component={(props) => (
-          <Suspense fallback={fallBackComponent}>
-            <AddBook {...props} />
-          </Suspense>
-        )}
-      />
-      <Route
-        path="/books/edit/:id"
-        exact
-        component={(props) => (
-          <Suspense fallback={fallBackComponent}>
-            <AddBook {...props} />
-          </Suspense>
-        )}
-      />
-      {/* Not found route */}
-      <Route
-        component={(props) => (
-          <Suspense fallback={fallBackComponent}>
-            <NotFound {...props} />
-          </Suspense>
-        )}
-      />
-    </Switch>
+    <Suspense fallback={fallBackComponent}>
+      <Switch>
+        {/* Public routes */}
+        <Route path="/" exact component={Home} />
+        <Route path="/book/:id" exact component={BookDetails} />
+        <Route path="/login" exact component={Login} />
+        {/* Admin routes */}
+        <Route path="/books" exact component={Book} />
+        <Route path="/books/new" exact component={AddBook} />
+        <Route path="/books/edit/:id" exact component={AddBook} />
+        {/* Not found route */}
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
   );
 }
 export default App;
