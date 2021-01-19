@@ -66,8 +66,8 @@ export default function BookCard({ book, index }) {
       />
       <CardMedia
         className={classes.media}
-        image={`https://source.unsplash.com/random/${index}`}
-        title="Paella dish"
+        image={`https://source.unsplash.com/random/350x20${index}`}
+        title={book.title}
       />
       <CardContent>
         <Tooltip placement="top" title={book.description}>

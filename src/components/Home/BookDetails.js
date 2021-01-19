@@ -54,7 +54,7 @@ export default function BookDetails({ match: { params } }) {
             component="img"
             alt={book.title}
             height="350"
-            image={`https://source.unsplash.com/random`}
+            image={`https://source.unsplash.com/random/700x175`}
             title={book.title}
           />
           <CardContent>
