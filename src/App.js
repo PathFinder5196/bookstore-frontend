@@ -6,6 +6,7 @@ import NotFound from "./components/NotFound";
 import AddBook from "./routes/book/AddBook";
 import Login from "./components/Login";
 import Home from "./components/Home";
+import BookDetails from "./components/Home/BookDetails";
 import WithAuth from "./components/WithAuth";
 
 axios.interceptors.request.use(
@@ -25,6 +26,7 @@ function App() {
     <Switch>
       {/* Public routes */}
       <Route path="/" exact component={Home} />
+      <Route path="/book/:id" exact component={BookDetails} />
       <Route path="/login" exact component={Login} />
       {/* Admin routes */}
       <Route path="/books" exact component={WithAuth(Book)} />

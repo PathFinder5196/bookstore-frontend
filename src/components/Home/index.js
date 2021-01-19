@@ -4,6 +4,7 @@ import { PublicLayout } from "../Layout";
 import { makeStyles } from "@material-ui/core/styles";
 import BookCard from "./BookCard";
 import { getAllBooks } from "../../actions/books";
+import BackdropComponent from "../BackdropComponent";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,19 +20,26 @@ const useStyles = makeStyles((theme) => ({
 function Home() {
   const classes = useStyles();
   const [books, setBooks] = useState([]);
+  const [showBackDrop, setShowBackDrop] = useState(false);
 
   useEffect(() => {
     getBooks();
   }, []);
 
   const getBooks = async () => {
+    setShowBackDrop(true);
     const resp = await getAllBooks();
     const data = resp.data;
     setBooks(data);
+    setShowBackDrop(false);
   };
 
   return (
     <PublicLayout>
+      <BackdropComponent
+        showBackDrop={showBackDrop}
+        setShowBackDrop={setShowBackDrop}
+      />
       <div className={classes.root}>
         <Grid container spacing={3}>
           {books.map((book, index) => (
